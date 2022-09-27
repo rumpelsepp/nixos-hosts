@@ -28,17 +28,19 @@
     useNetworkd = true;
   };
 
-  systemd.network.networks =
-    let
-    in
-    {
-      "eth" = {
-        enable = true;
-        name = "ens3";
-        DHCP = "yes";
-        dhcpV4Config.RouteMetric = 1024; # Better be explicit                                                                                                                                                                      
-      };
+  systemd.network.networks = {
+    "ens3" = {
+      enable = true;
+      name = "ens3";
+      DHCP = "yes";
+      gateway = [ "fe80::1" ];
+      address = [ "2a01:4f8:1c0c:4a29::/64" ];
     };
+    "ens10" = {
+      name = "ens10";
+      DHCP = "yes";
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
