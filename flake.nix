@@ -7,33 +7,35 @@
 
   outputs = { self, nixpkgs, ... }:
     let
+      inherit (nixpkgs) lib;
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
         config = { allowUnfree = true; };
       };
-      lib = import ./lib { inherit system pkgs; };
-
+      util = import ./lib { inherit system pkgs lib; };
     in
     {
       nixosConfigurations = {
-        selonia = lib.host.mkHost {
+        selonia = util.host.mkHost {
+          bootDevice = "/dev/sda";
+          hardwareConfig = ./hosts/selonia/hardware-configuration.nix;
+          networkConfig = {
+            "ens3" = {
+              enable = true;
+              name = "ens3";
+              DHCP = "yes";
+              gateway = [ "fe80::1" ];
+              address = [ "2a01:4f8:1c0c:4a29::1/64" ];
+            };
+            "ens10" = {
+              name = "ens10";
+              DHCP = "yes";
+            };
+          };
           hostname = "selonia";
-          systempkgs = with pkgs; [
-            wget
-            curl
-            tmux
-            neovim
-            htop
-            fish
-            git
-            nftables
-	    tree
-          ];
-          authorizedKeys = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILBQwuGetGWeXO1BVSqW72GPZ9J4Rt6G6+nMgueXQlGi rumpelsepp@kronos"
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJH55JYJ4pNSoP4va/ePLMlxF3huGH5lok6uaBMDmDIM rumpelsepp@alderaan"
-          ];
+          systempkgs = util.systempkgs;
+          authorizedKeys = util.authorized_keys_root;
           stateVersion = "22.05";
         };
       };
