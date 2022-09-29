@@ -56,6 +56,8 @@
     totem # video player
   ]);
 
+  virtualization.docker.enable = true;
+
   programs = {
     neovim = {
       enable = true;
