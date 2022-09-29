@@ -15,6 +15,7 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.efiSupport = false;
   boot.loader.grub.device = "/dev/nvme0n1"; # or "nodev" for efi only
+  boot.tmpOnTmpfs = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -66,6 +67,8 @@
     wireshark.enable = true;
     git.enable = true;
     htop.enable = true;
+    iotop.enable = true;
+    iftop.enable = true;
 
     evolution = {
       enable = true;
@@ -136,8 +139,6 @@
       "\${XDG_BIN_HOME}"
     ];
   };
-
-  # Enable CUPS to print documents.
 
   security.rtkit.enable = true;
   hardware.pulseaudio.enable = false;
@@ -211,9 +212,9 @@
     };
   };
 
-  xdg = {
-    portal.gtkUsePortal = true;
-  };
+  # xdg = {
+  #   portal.gtkUsePortal = true;
+  # };
 
 
 
