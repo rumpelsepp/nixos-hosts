@@ -150,7 +150,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.steff = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "wireshark" ];
+    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker"];
     packages = with pkgs; [
     ];
   };
