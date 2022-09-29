@@ -48,6 +48,7 @@
           systemd.network.networks = networkConfig;
 
           programs.neovim.defaultEditor = true;
+          programs.fish.enable = true;
 
           programs.tmux = {
             enable = true;

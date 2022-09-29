@@ -16,6 +16,8 @@
     nftables
     tree
     ripgrep
+    man-pages
+    man-pages-posix
   ];
   authorized_keys_root = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILBQwuGetGWeXO1BVSqW72GPZ9J4Rt6G6+nMgueXQlGi rumpelsepp@kronos"
