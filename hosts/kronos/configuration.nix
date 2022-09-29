@@ -16,6 +16,9 @@
   boot.loader.grub.efiSupport = false;
   boot.loader.grub.device = "/dev/nvme0n1"; # or "nodev" for efi only
   boot.tmpOnTmpfs = true;
+  boot.extraModprobeConfig = ''
+      options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
+  '';
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
