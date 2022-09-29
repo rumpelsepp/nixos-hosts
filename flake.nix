@@ -17,6 +17,12 @@
     in
     {
       nixosConfigurations = {
+        kronos = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/kronos/configuration.nix
+          ];
+        };
         selonia = util.host.mkHost {
           bootDevice = "/dev/sda";
           hardwareConfig = ./hosts/selonia/hardware-configuration.nix;
