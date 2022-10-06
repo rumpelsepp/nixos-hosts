@@ -3,9 +3,14 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-22.05";
+
+    home-manager = {
+      url = github:nix-community/home-manager/release-22.05;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
     let
       inherit (nixpkgs) lib;
       system = "x86_64-linux";
@@ -14,6 +19,7 @@
         config = { allowUnfree = true; };
       };
       util = import ./lib { inherit system pkgs lib; };
+      foo = import ./hosts/kronos/home.nix;
     in
     {
       nixosConfigurations = {
@@ -21,6 +27,12 @@
           inherit system;
           modules = [
             ./hosts/kronos/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.steff = foo;
+            }
           ];
         };
         selonia = util.host.mkHost {

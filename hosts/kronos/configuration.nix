@@ -17,7 +17,7 @@
   boot.loader.grub.device = "/dev/nvme0n1"; # or "nodev" for efi only
   boot.tmpOnTmpfs = true;
   boot.extraModprobeConfig = ''
-      options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
+    options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
   '';
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -51,17 +51,18 @@
     gnome-tour
   ]) ++ (with pkgs.gnome; [
     cheese # webcam tool
+    epiphany # web browser
+    geary # email reader
     gnome-music
     gnome-software
     gnome-terminal
-    epiphany # web browser
-    geary # email reader
     totem # video player
   ]);
 
   virtualisation.docker.enable = true;
 
   programs = {
+    nix-ld.enable = true;
     neovim = {
       enable = true;
       vimAlias = true;
@@ -69,11 +70,11 @@
       defaultEditor = true;
     };
 
-    wireshark.enable = true;
     git.enable = true;
     htop.enable = true;
-    iotop.enable = true;
     iftop.enable = true;
+    iotop.enable = true;
+    wireshark.enable = true;
 
     evolution = {
       enable = true;
@@ -113,17 +114,17 @@
 
   fonts = {
     fonts = with pkgs; [
+      dina-font
+      fira-code
+      fira-code-symbols
+      jetbrains-mono
+      liberation_ttf
+      mplus-outline-fonts.githubRelease
+      nerdfonts
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      liberation_ttf
-      fira-code
-      fira-code-symbols
-      mplus-outline-fonts.githubRelease
-      dina-font
       proggyfonts
-      jetbrains-mono
-      nerdfonts
     ];
     fontconfig = {
       defaultFonts = {
@@ -153,7 +154,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.steff = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker"];
+    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" ];
     packages = with pkgs; [
     ];
   };
@@ -162,17 +163,36 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     curl
+    fd
     firefox
+    gnome.gnome-boxes
+    helix
+    lsd
     man-pages
     man-pages-posix
+    musescore
     nftables
     ripgrep
-    fd
-    lsd
+    rustup
     texlive.combined.scheme-full
     tree
+    tuxguitar
+    vlc
     wget
+    alacritty
+    foot
   ];
+
+  virtualisation.spiceUSBRedirection.enable = true;
+
+  system.activationScripts = {
+    rfkillUnblockWlan = {
+      text = ''
+        rfkill unblock wlan
+      '';
+      deps = [ ];
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -220,8 +240,6 @@
   # xdg = {
   #   portal.gtkUsePortal = true;
   # };
-
-
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
