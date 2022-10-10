@@ -5,6 +5,20 @@
   # paths it should manage.
   home.username = "steff";
   home.homeDirectory = "/home/steff";
+  home.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = "1";
+    MOZ_DBUS_REMOTE = "1";
+    BAT_THEME = "1337";
+    PAGER = "less";
+    MANWIDTH = "80";
+    MANOPT = "--nj --nh";
+    MANPAGER = "nvim +Man!";
+    NIXPKGS_ALLOW_UNFREE = "1";
+    NIXOS_OZONE_WL = "1";
+  };
+  home.packages = [
+    pkgs.python310Packages.ipython
+  ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -19,46 +33,47 @@
   # Let Home Manager install and manage itself.
   programs = {
     bat.enable = true;
-    broot = { 
-        enable = true;
-        enableFishIntegration = true;
+    bash.enable = true;
+    broot = {
+      enable = true;
+      enableFishIntegration = true;
     };
-    fish = { 
-        enable = true;
-        shellAliases = {
-            ip = "ip --color=auto";
-            ls = "lsd";
-            now = "date +%F_%T";
-            now-raw = "date +%Y%m%d%H%M";
-            today = "date +%F";
-            hd = "hexdump -C";
-            o = "gio open";
-        };
-        interactiveShellInit = ''
-complete -c hd -w hexdump
-complete -c o -w "gio open"
-export BAT_THEME="1337"
+    chromium. enable = true;
+    fish = {
+      enable = true;
+      shellAliases = {
+        ip = "ip --color=auto";
+        ls = "lsd";
+        now = "date +%F_%T";
+        now-raw = "date +%Y%m%d%H%M";
+        today = "date +%F";
+        hd = "hexdump -C";
+        o = "gio open";
+      };
+      interactiveShellInit = ''
+        complete -c hd -w hexdump
+        complete -c o -w "gio open"
 
-functions -c fish_prompt __old_fish_prompt
+        functions -c fish_prompt __old_fish_prompt
 
-function fish_prompt
-    # Run the default prompt first.
-    set -l prompt (__old_fish_prompt)
+        function fish_prompt
+            # Run the default prompt first.
+            set -l prompt (__old_fish_prompt)
 
-    if test -n "$IN_NIX_SHELL"
-        printf '(nix shell) '
-    end
+            if test -n "$IN_NIX_SHELL"
+                printf '(nix shell) '
+            end
 
-    string join -- \n $prompt # handle multi-line prompts
-end
+            string join -- \n $prompt # handle multi-line prompts
+        end
 
-function __fish_set_oldpwd --on-variable dirprev
-    set -g OLDPWD $dirprev[-1]
-end
+        function __fish_set_oldpwd --on-variable dirprev
+            set -g OLDPWD $dirprev[-1]
+        end
 
-function cd-root
-    cd "$(git rev-parse --show-toplevel)"
-end'';
+        function cd-root
+            cd "$(git rev-parse --show-toplevel)"
+        end'';
     };
     gh.enable = true;
     git = {

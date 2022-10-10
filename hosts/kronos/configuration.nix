@@ -22,12 +22,15 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nixpkgs.config.allowUnfree = true;
+
   networking = {
     hostName = "kronos";
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
       firewallBackend = "nftables";
+      enableFccUnlock = true;
     };
   };
 
@@ -75,6 +78,10 @@
     iftop.enable = true;
     iotop.enable = true;
     wireshark.enable = true;
+    gnupg.agent = {
+      enable = true;
+      pinentryFlavor = "gnome3";
+    };
 
     evolution = {
       enable = true;
@@ -147,20 +154,33 @@
   };
 
   security.rtkit.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware = {
+    pulseaudio.enable = false;
+    sane = {
+      enable = true;
+      extraBackends = [ pkgs.hplipWithPlugin pkgs.sane-airscan ];
+    };
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver # LIBVA_DRIVER_NAME=iHD
+        # vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+    };
+  };
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.steff = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "scanner" "lp" "saned" ];
     packages = with pkgs; [
     ];
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     curl
     fd
@@ -181,6 +201,8 @@
     wget
     alacritty
     foot
+    openssl_3
+    killall
   ];
 
   virtualisation.spiceUSBRedirection.enable = true;
@@ -208,12 +230,19 @@
   # services.openssh.enable = true;
 
   services = {
+
+    geoclue2.enable = true;
     resolved = {
       enable = true;
       dnssec = "false";
     };
 
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [
+        pkgs.hplipWithPlugin
+      ];
+    };
 
     xserver = {
       enable = true;
