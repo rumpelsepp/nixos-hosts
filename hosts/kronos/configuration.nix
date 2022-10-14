@@ -11,17 +11,20 @@
       ./hardware-configuration.nix
     ];
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.efiSupport = false;
-  boot.loader.grub.device = "/dev/nvme0n1"; # or "nodev" for efi only
-  boot.tmpOnTmpfs = true;
-  boot.extraModprobeConfig = ''
-    options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
-  '';
+  boot = {
+    loader.grub = {
+      enable = true;
+      version = 2;
+      efiSupport = false;
+      device = "/dev/nvme0n1"; # or "nodev" for efi only
+    };
+    tmpOnTmpfs = true;
+    extraModprobeConfig = ''
+      options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
+    '';
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   nixpkgs.config.allowUnfree = true;
 
   networking = {
@@ -62,7 +65,6 @@
     totem # video player
   ]);
 
-  virtualisation.docker.enable = true;
 
   programs = {
     nix-ld.enable = true;
@@ -174,11 +176,13 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.steff = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "scanner" "lp" "saned" ];
-    packages = with pkgs; [
-    ];
+  users = {
+    users.steff = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "scanner" "lp" "saned" "vboxusers" ];
+      packages = with pkgs; [
+      ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -203,9 +207,19 @@
     foot
     openssl_3
     killall
+    usbutils
+    libinput
   ];
 
-  virtualisation.spiceUSBRedirection.enable = true;
+  virtualisation = {
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
+
+    spiceUSBRedirection.enable = true;
+    docker.enable = true;
+  };
 
   system.activationScripts = {
     rfkillUnblockWlan = {
@@ -230,7 +244,6 @@
   # services.openssh.enable = true;
 
   services = {
-
     geoclue2.enable = true;
     resolved = {
       enable = true;

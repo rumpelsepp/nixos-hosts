@@ -18,6 +18,7 @@
   };
   home.packages = [
     pkgs.python310Packages.ipython
+    pkgs.signal-desktop
   ];
 
   # This value determines the Home Manager release that your
@@ -38,7 +39,7 @@
       enable = true;
       enableFishIntegration = true;
     };
-    chromium. enable = true;
+    chromium.enable = true;
     fish = {
       enable = true;
       shellAliases = {
@@ -53,6 +54,7 @@
       interactiveShellInit = ''
         complete -c hd -w hexdump
         complete -c o -w "gio open"
+        complete -c ls -w "lsd"
 
         functions -c fish_prompt __old_fish_prompt
 
@@ -114,7 +116,6 @@
         core = {
           editor = "nvim +1";
           autocrlf = "input";
-          # pager = "delta --diff-highlight";
         };
         checkout.workers = 0;
         credential.helper = "cache";
@@ -131,6 +132,32 @@
           light = false;
           line-numbers = true;
           diff-highlight = true;
+        };
+      };
+    };
+    ssh = {
+      enable = true;
+      serverAliveInterval = 25;
+      extraConfig = "AddKeysToAgent yes";
+      matchBlocks = {
+        "storagebox" = {
+          hostname = "u160551.your-storagebox.de";
+          port = 23;
+          user = "u160551";
+        };
+        "aur" = {
+          hostname = "aur.archlinux.org";
+          identityFile = "~/.ssh/aur";
+          user = "aur";
+        };
+        "pwner" = {
+          hostname = "pin-rpi2.aisec.fraunhofer.de";
+          user = "rumpelsepp";
+        };
+        "pin-storage" = {
+          hostname = "storage.pin.aisec.fraunhofer.de";
+          user = "steff";
+          identityFile = "~/.ssh/id_ed25519.pub";
         };
       };
     };
