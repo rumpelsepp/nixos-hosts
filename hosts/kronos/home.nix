@@ -6,7 +6,6 @@
   home.username = "steff";
   home.homeDirectory = "/home/steff";
   home.sessionVariables = {
-    MOZ_ENABLE_WAYLAND = "1";
     MOZ_DBUS_REMOTE = "1";
     BAT_THEME = "1337";
     PAGER = "less";
@@ -16,19 +15,25 @@
     NIXPKGS_ALLOW_UNFREE = "1";
     NIXOS_OZONE_WL = "1";
   };
-  home.packages = [
-    pkgs.python310Packages.ipython
-    pkgs.signal-desktop
+  home.packages = with pkgs; [
+    python310Packages.ipython
+    signal-desktop
+    # pkgs.reaper
+    zam-plugins
+    yabridge
+    yabridgectl
+    # go
+    go_1_18
   ];
 
   xdg.desktopEntries = {
-      signal-wayland = {
-          name = "Signal Wayland";
-          mimeType = [ "x-scheme-handler/sgnl" "x-scheme-handler/signalcaptcha" ];
-          icon = "signal-desktop";
-          categories = [ "Application" ];
-          exec = "signal-desktop --enable-features=WaylandWindowDecorations --no-sandbox %U";
-      };
+    signal-wayland = {
+      name = "Signal Wayland";
+      mimeType = [ "x-scheme-handler/sgnl" "x-scheme-handler/signalcaptcha" ];
+      icon = "signal-desktop";
+      categories = [ "Application" ];
+      exec = "signal-desktop --enable-features=WaylandWindowDecorations --no-sandbox %U";
+    };
   };
 
   # This value determines the Home Manager release that your
@@ -86,6 +91,29 @@
         function cd-root
             cd "$(git rev-parse --show-toplevel)"
         end'';
+    };
+    firefox = {
+      enable = true;
+      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+        forceWayland = true;
+        extraPolicies = {
+          DisableFirefoxStudies = true;
+          DisablePocket = true;
+          DisableTelemetry = true;
+          FirefoxHome = {
+            Pocket = false;
+            Snippets = false;
+          };
+          UserMessaging = {
+            ExtensionRecommendations = false;
+            SkipOnboarding = true;
+          };
+          # SecurityDevices = {
+          #   # Use a proxy module rather than `nixpkgs.config.firefox.smartcardSupport = true`
+          #   "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+          # };
+        };
+      };
     };
     gh.enable = true;
     git = {

@@ -209,6 +209,12 @@
     killall
     usbutils
     libinput
+    cifs-utils
+    keyutils
+    networkmanagerapplet
+    ncdu
+    gnumake
+    tokei
   ];
 
   virtualisation = {
