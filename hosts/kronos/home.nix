@@ -18,12 +18,10 @@
   home.packages = with pkgs; [
     python310Packages.ipython
     signal-desktop
-    # pkgs.reaper
     zam-plugins
     yabridge
     yabridgectl
-    # go
-    go_1_18
+    pwgen
   ];
 
   xdg.desktopEntries = {

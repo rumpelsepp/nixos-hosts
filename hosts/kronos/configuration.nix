@@ -22,6 +22,10 @@
     extraModprobeConfig = ''
       options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
     '';
+    kernel.sysctl = {
+        "net.core.rmem_max" = 2500000;
+    };
+    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
