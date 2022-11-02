@@ -23,7 +23,7 @@
       options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
     '';
     kernel.sysctl = {
-        "net.core.rmem_max" = 2500000;
+      "net.core.rmem_max" = 2500000;
     };
     kernelPackages = pkgs.linuxPackages_latest;
   };
@@ -94,11 +94,6 @@
       plugins = [ pkgs.evolution-ews ];
     };
 
-    fish = {
-      enable = true;
-      shellInit = "set fish_greeting";
-    };
-
     tmux = {
       enable = true;
       escapeTime = 50;
@@ -118,6 +113,7 @@
         # Enable true color stuff
         set-option -sa terminal-overrides ',alacritty:RGB'
         set-option -sa terminal-overrides ',foot:RGB'
+        set-option -sa terminal-overrides ',xterm-256color:RGB'
         bind-key "c" new-window -c "#{pane_current_path}"
         bind-key '"' split-window -c "#{pane_current_path}"
         bind-key "%" split-window -h -c "#{pane_current_path}"
@@ -159,7 +155,16 @@
     ];
   };
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.loginLimits = [
+      { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+      { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+      { domain = "@audio"; item = "nofile"; type = "soft"; value = "99999"; }
+      { domain = "@audio"; item = "nofile"; type = "hard"; value = "99999"; }
+    ];
+  };
+
   hardware = {
     pulseaudio.enable = false;
     sane = {
@@ -183,44 +188,19 @@
   users = {
     users.steff = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "scanner" "lp" "saned" "vboxusers" ];
+      extraGroups = [ "wheel" "networkmanager" "wireshark" "docker" "scanner" "lp" "saned" "vboxusers" "audio" ];
       packages = with pkgs; [
       ];
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    curl
-    fd
-    firefox
+  environment.systemPackages = with pkgs; [ 
+    gnome.dconf-editor
     gnome.gnome-boxes
-    helix
-    lsd
-    man-pages
-    man-pages-posix
-    musescore
-    nftables
-    ripgrep
-    rustup
-    texlive.combined.scheme-full
-    tree
-    tuxguitar
-    vlc
-    wget
-    alacritty
-    foot
-    openssl_3
-    killall
-    usbutils
-    libinput
-    cifs-utils
-    keyutils
-    networkmanagerapplet
-    ncdu
-    gnumake
-    tokei
+    gnome.gnome-tweaks
   ];
 
+  # environment.variables =
   virtualisation = {
     virtualbox.host = {
       enable = true;
@@ -277,7 +257,6 @@
 
     flatpak.enable = true;
 
-    # Enable the GNOME Desktop Environment.
     gnome.gnome-keyring.enable = true;
 
     pipewire = {
@@ -286,6 +265,13 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
+    };
+
+    udev = {
+      extraRules = ''
+        KERNEL=="rtc0", GROUP="audio"
+        KERNEL=="hpet", GROUP="audio"
+      '';
     };
   };
 

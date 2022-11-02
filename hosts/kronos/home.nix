@@ -5,7 +5,23 @@
   # paths it should manage.
   home.username = "steff";
   home.homeDirectory = "/home/steff";
-  home.sessionVariables = {
+  home.sessionVariables =
+    let
+      makePluginPath = format:
+        (pkgs.lib.strings.makeSearchPath format [
+          "$HOME/.nix-profile/lib"
+          "/run/current-system/sw/lib"
+          "/etc/profiles/per-user/$USER/lib"
+        ])
+        + ":$HOME/.${format}";
+    in
+    {
+      DSSI_PATH = makePluginPath "dssi";
+      LADSPA_PATH = makePluginPath "ladspa";
+      LV2_PATH = makePluginPath "lv2";
+      LXVST_PATH = makePluginPath "lxvst";
+      VST_PATH = makePluginPath "vst";
+      VST3_PATH = makePluginPath "vst3";
     MOZ_DBUS_REMOTE = "1";
     BAT_THEME = "1337";
     PAGER = "less";
@@ -14,14 +30,72 @@
     MANPAGER = "nvim +Man!";
     NIXPKGS_ALLOW_UNFREE = "1";
     NIXOS_OZONE_WL = "1";
-  };
+    };
+
   home.packages = with pkgs; [
+    # wine
+    # gnupg
+    alacritty
+    bat
+    chromium
+    cifs-utils
+    curl
+    dconf
+    delta
+    fd
+    file
+    foot
+    fzf
+    gnumake
+    gopass
+    hexyl
+    inkscape
+    jq
+    keyutils
+    killall
+    libinput
+    libreoffice
+    lsd
+    lsp-plugins
+    man-pages
+    man-pages-posix
+    musescore
+    ncdu_2
+    networkmanagerapplet
+    nftables
+    nmap
+    obs-studio
+    obs-studio-plugins.obs-pipewire-audio-capture
+    openssl_3
+    pavucontrol
+    pwgen
+    python310
     python310Packages.ipython
+    qemu_full
+    qpwgraph
+    qrencode
+    rclone
+    restic
+    ripgrep
+    rustup
+    sequoia
     signal-desktop
-    zam-plugins
+    texlive.combined.scheme-full
+    tokei
+    tree
+    tuxguitar
+    unzip
+    usbutils
+    vlc
+    wget
+    wineWowPackages.waylandFull
+    wl-clipboard
+    xplr
     yabridge
     yabridgectl
-    pwgen
+    yt-dlp
+    zam-plugins
+    zip
   ];
 
   xdg.desktopEntries = {
@@ -68,6 +142,8 @@
         complete -c hd -w hexdump
         complete -c o -w "gio open"
         complete -c ls -w "lsd"
+
+        set fish_greeting
 
         functions -c fish_prompt __old_fish_prompt
 
@@ -170,6 +246,26 @@
           diff-highlight = true;
         };
       };
+    };
+    helix = {
+        enable = true;
+        settings = {
+            theme = "dark_plus";
+            editor = {
+                color-modes = true;
+                true-color = true;
+                cursor-shape = {
+                    insert = "bar";
+                    normal = "block";
+                    select = "underline";
+                };
+                indent-guides = {
+                    render = true;
+                    character = "╎";
+                };
+                lsp.auto-signature-help = false;
+            };
+        };
     };
     ssh = {
       enable = true;
