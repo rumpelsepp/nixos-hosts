@@ -168,7 +168,7 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [ 
+  environment.systemPackages = with pkgs; [
     gnome.dconf-editor
     gnome.gnome-boxes
     gnome.gnome-tweaks
