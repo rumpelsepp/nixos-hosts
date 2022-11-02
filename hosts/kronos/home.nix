@@ -22,21 +22,19 @@
       LXVST_PATH = makePluginPath "lxvst";
       VST_PATH = makePluginPath "vst";
       VST3_PATH = makePluginPath "vst3";
-    MOZ_DBUS_REMOTE = "1";
-    BAT_THEME = "1337";
-    PAGER = "less";
-    MANWIDTH = "80";
-    MANOPT = "--nj --nh";
-    MANPAGER = "nvim +Man!";
-    NIXPKGS_ALLOW_UNFREE = "1";
-    NIXOS_OZONE_WL = "1";
+      MOZ_DBUS_REMOTE = "1";
+      PAGER = "less";
+      MANWIDTH = "80";
+      MANOPT = "--nj --nh";
+      MANPAGER = "nvim +Man!";
+      NIXPKGS_ALLOW_UNFREE = "1";
+      NIXOS_OZONE_WL = "1";
     };
 
   home.packages = with pkgs; [
     # wine
     # gnupg
     alacritty
-    bat
     chromium
     cifs-utils
     curl
@@ -45,17 +43,14 @@
     fd
     file
     foot
-    fzf
     gnumake
     gopass
     hexyl
     inkscape
-    jq
     keyutils
     killall
     libinput
     libreoffice
-    lsd
     lsp-plugins
     man-pages
     man-pages-posix
@@ -64,8 +59,6 @@
     networkmanagerapplet
     nftables
     nmap
-    obs-studio
-    obs-studio-plugins.obs-pipewire-audio-capture
     openssl_3
     pavucontrol
     pwgen
@@ -80,7 +73,6 @@
     rustup
     sequoia
     signal-desktop
-    texlive.combined.scheme-full
     tokei
     tree
     tuxguitar
@@ -120,7 +112,10 @@
 
   # Let Home Manager install and manage itself.
   programs = {
-    bat.enable = true;
+    bat = {
+      enable = true;
+      config.theme = "1337";
+    };
     bash.enable = true;
     broot = {
       enable = true;
@@ -131,7 +126,6 @@
       enable = true;
       shellAliases = {
         ip = "ip --color=auto";
-        ls = "lsd";
         now = "date +%F_%T";
         now-raw = "date +%Y%m%d%H%M";
         today = "date +%F";
@@ -141,7 +135,6 @@
       interactiveShellInit = ''
         complete -c hd -w hexdump
         complete -c o -w "gio open"
-        complete -c ls -w "lsd"
 
         set fish_greeting
 
@@ -188,6 +181,38 @@
           # };
         };
       };
+    };
+    tmux = {
+      enable = true;
+      escapeTime = 50;
+      keyMode = "vi";
+      terminal = "tmux-256color";
+      clock24 = true;
+      secureSocket = false;
+      shell = "${pkgs.fish}/bin/fish";
+      extraConfig = ''
+        set-option -g set-titles on
+        set-option -g set-titles-string "tmux [#H]: #S:#W"
+        set-option -g set-clipboard on
+        set-option -g renumber-windows on
+        set-option -g status-right ""
+        set-option -g mouse on
+        set-option -g focus-events on
+
+        # Enable true color stuff
+        set-option -sa terminal-overrides ',alacritty:RGB'
+        set-option -sa terminal-overrides ',foot:RGB'
+        set-option -sa terminal-overrides ',xterm-256color:RGB'
+        bind-key "c" new-window -c "#{pane_current_path}"
+        bind-key '"' split-window -c "#{pane_current_path}"
+        bind-key "%" split-window -h -c "#{pane_current_path}"
+        bind-key "/" copy-mode \; send-key /'';
+    };
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+      defaultCommand = "fd --type f";
+      tmux.enableShellIntegration = true;
     };
     gh.enable = true;
     git = {
@@ -248,24 +273,42 @@
       };
     };
     helix = {
-        enable = true;
-        settings = {
-            theme = "dark_plus";
-            editor = {
-                color-modes = true;
-                true-color = true;
-                cursor-shape = {
-                    insert = "bar";
-                    normal = "block";
-                    select = "underline";
-                };
-                indent-guides = {
-                    render = true;
-                    character = "╎";
-                };
-                lsp.auto-signature-help = false;
-            };
+      enable = true;
+      settings = {
+        theme = "dark_plus";
+        editor = {
+          color-modes = true;
+          true-color = true;
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
+          };
+          indent-guides = {
+            render = true;
+            character = "╎";
+          };
+          lsp.auto-signature-help = false;
         };
+      };
+    };
+    less.enable = true;
+    jq.enable = true;
+    lsd = {
+      enable = true;
+      enableAliases = true;
+      settings = {
+        date = "+%d. %b %y %H:%M";
+        icons.when = "never";
+      };
+    };
+    man = {
+      enable = true;
+      generateCaches = true;
+    };
+    obs-studio = {
+      enable = true;
+      plugins = [pkgs.obs-studio-plugins.obs-pipewire-audio-capture];
     };
     ssh = {
       enable = true;
@@ -293,6 +336,16 @@
         };
       };
     };
+    texlive.enable = true;
     home-manager.enable = true;
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    zellij.enable = true;
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
   };
 }
