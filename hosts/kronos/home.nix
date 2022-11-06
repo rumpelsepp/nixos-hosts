@@ -29,6 +29,8 @@
       MANPAGER = "nvim +Man!";
       NIXPKGS_ALLOW_UNFREE = "1";
       NIXOS_OZONE_WL = "1";
+      SDL_VIDEODRIVER = "wayland";
+      QT_QPA_PLATFORM = "wayland";
     };
 
   home.packages = with pkgs; [
@@ -43,8 +45,11 @@
     fd
     file
     foot
+    ffmpeg
     gnumake
     gopass
+    gopro
+    gimp
     hexyl
     inkscape
     keyutils
@@ -71,7 +76,10 @@
     restic
     ripgrep
     rustup
+    pinentry-gnome
+    reaper
     sequoia
+    kdenlive
     signal-desktop
     tokei
     tree
@@ -88,6 +96,7 @@
     yt-dlp
     zam-plugins
     zip
+    qjackctl
   ];
 
   xdg.desktopEntries = {
@@ -137,6 +146,7 @@
         complete -c o -w "gio open"
 
         set fish_greeting
+        set fish_command_not_found
 
         functions -c fish_prompt __old_fish_prompt
 
@@ -342,6 +352,7 @@
       enable = true;
       enableFishIntegration = true;
     };
+    wezterm.enable = true;
     zellij.enable = true;
     zoxide = {
       enable = true;
