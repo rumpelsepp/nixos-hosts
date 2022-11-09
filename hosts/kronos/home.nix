@@ -31,6 +31,7 @@
       NIXOS_OZONE_WL = "1";
       SDL_VIDEODRIVER = "wayland";
       QT_QPA_PLATFORM = "wayland";
+      EDITOR = "hx";
     };
 
   home.packages = with pkgs; [
@@ -97,6 +98,7 @@
     zam-plugins
     zip
     qjackctl
+    dos2unix
   ];
 
   xdg.desktopEntries = {
@@ -213,6 +215,7 @@
         set-option -sa terminal-overrides ',alacritty:RGB'
         set-option -sa terminal-overrides ',foot:RGB'
         set-option -sa terminal-overrides ',xterm-256color:RGB'
+
         bind-key "c" new-window -c "#{pane_current_path}"
         bind-key '"' split-window -c "#{pane_current_path}"
         bind-key "%" split-window -h -c "#{pane_current_path}"
@@ -285,6 +288,10 @@
     helix = {
       enable = true;
       settings = {
+        keys.normal = {
+          m.l = ["extend_to_line_bounds" "trim_selections"];
+          D = ["extend_to_line_end"  "delete_selection"];
+        };
         theme = "dark_plus";
         editor = {
           color-modes = true;

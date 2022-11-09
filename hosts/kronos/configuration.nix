@@ -62,7 +62,6 @@
     gnome-photos
     gnome-tour
   ]) ++ (with pkgs.gnome; [
-    cheese # webcam tool
     epiphany # web browser
     geary # email reader
     gnome-music
@@ -174,7 +173,21 @@
     gnome.dconf-editor
     gnome.gnome-boxes
     gnome.gnome-tweaks
+    libp11
+    p11-kit
+    opensc
+    gnutls.bin
+    pcsctools
   ];
+
+  environment.etc = {
+    "pkcs11/modules/work".text = ''
+      module:/nix/store/z8qzygd7scmk3agjam9lg3f0qrpz27w0-fraunhofer-smartcard-8.0.1.694/usr/lib/libcvP11.so
+    '';
+    "pkcs11/modules/opensc".text = ''
+      module:${pkgs.opensc}/lib/opensc-pkcs11.so
+    '';
+  };
 
   # environment.variables =
   virtualisation = {
@@ -210,6 +223,7 @@
   # services.openssh.enable = true;
 
   services = {
+    pcscd.enable = true;
     geoclue2.enable = true;
     resolved = {
       enable = true;
