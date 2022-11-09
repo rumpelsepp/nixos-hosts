@@ -101,16 +101,6 @@
     dos2unix
   ];
 
-  xdg.desktopEntries = {
-    signal-wayland = {
-      name = "Signal Wayland";
-      mimeType = [ "x-scheme-handler/sgnl" "x-scheme-handler/signalcaptcha" ];
-      icon = "signal-desktop";
-      categories = [ "Application" ];
-      exec = "signal-desktop --enable-features=WaylandWindowDecorations --no-sandbox %U";
-    };
-  };
-
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
