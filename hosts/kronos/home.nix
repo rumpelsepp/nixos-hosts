@@ -99,6 +99,7 @@
     zip
     qjackctl
     dos2unix
+    wireshark-qt
   ];
 
   # This value determines the Home Manager release that your
@@ -280,7 +281,8 @@
       settings = {
         keys.normal = {
           m.l = ["extend_to_line_bounds" "trim_selections"];
-          D = ["extend_to_line_end"  "delete_selection"];
+          D = ["extend_to_line_end" "delete_selection"];
+          L = ["extend_to_line_bounds" "delete_selection_noyank" "open_above"];
         };
         theme = "dark_plus";
         editor = {
