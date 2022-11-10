@@ -62,6 +62,7 @@
     man-pages-posix
     musescore
     ncdu_2
+    difftastic
     networkmanagerapplet
     nftables
     nmap
@@ -178,10 +179,10 @@
             ExtensionRecommendations = false;
             SkipOnboarding = true;
           };
-          # SecurityDevices = {
+          SecurityDevices = {
           #   # Use a proxy module rather than `nixpkgs.config.firefox.smartcardSupport = true`
-          #   "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
-          # };
+            "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+          };
         };
       };
     };
@@ -255,7 +256,7 @@
       ];
       extraConfig = {
         core = {
-          editor = "nvim +1";
+          editor = "hx";
           autocrlf = "input";
         };
         checkout.workers = 0;
