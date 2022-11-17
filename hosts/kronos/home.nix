@@ -101,6 +101,8 @@
     qjackctl
     dos2unix
     wireshark-qt
+    _7zz
+    dnsmasq
   ];
 
   # This value determines the Home Manager release that your
@@ -180,8 +182,8 @@
             SkipOnboarding = true;
           };
           SecurityDevices = {
-          #   # Use a proxy module rather than `nixpkgs.config.firefox.smartcardSupport = true`
-            "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+            # Use a proxy module rather than `nixpkgs.config.firefox.smartcardSupport = true`
+            # "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
           };
         };
       };
@@ -301,6 +303,13 @@
           lsp.auto-signature-help = false;
         };
       };
+      languages = [
+        {
+          name = "go";
+          formatter = { command = "goimports"; };
+          auto-format = true;
+        }
+      ];
     };
     less.enable = true;
     jq.enable = true;

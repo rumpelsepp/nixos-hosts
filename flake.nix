@@ -1,6 +1,4 @@
 {
-  description = "rumpelsepp's nixos fleet";
-
   inputs = {
     # nixpkgs.url = "nixpkgs/nixos-22.05";
     nixpkgs.url = "nixpkgs";
@@ -10,14 +8,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-ld = {
-        url = "github:Mic92/nix-ld";
-        inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-ld, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
     let
       inherit (nixpkgs) lib;
       system = "x86_64-linux";
@@ -40,7 +33,6 @@
               home-manager.useUserPackages = true;
               home-manager.users.steff = kronos_home;
             }
-            nix-ld.nixosModules.nix-ld
           ];
         };
         selonia = util.host.mkHost {
