@@ -32,6 +32,7 @@
       SDL_VIDEODRIVER = "wayland";
       QT_QPA_PLATFORM = "wayland";
       EDITOR = "hx";
+      LIBVA_DRIVER_NAME = "iHD";
     };
 
   home.packages = with pkgs; [
@@ -103,6 +104,17 @@
     wireshark-qt
     _7zz
     dnsmasq
+    gitoxide
+    netcat-openbsd
+    texlive.combined.scheme-full
+    python310Packages.pygments
+    intel-gpu-tools
+    libva-utils
+    gst_all_1.gst-vaapi
+    pwntools
+    socat
+    websocat
+    pitivi
   ];
 
   # This value determines the Home Manager release that your
@@ -168,7 +180,6 @@
     firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        forceWayland = true;
         extraPolicies = {
           DisableFirefoxStudies = true;
           DisablePocket = true;
@@ -325,9 +336,16 @@
       enable = true;
       generateCaches = true;
     };
+    mpv = {
+      enable = true;
+      scripts = [pkgs.mpvScripts.mpris];
+    };
     obs-studio = {
       enable = true;
-      plugins = [ pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
+      plugins = with pkgs.obs-studio-plugins; [ 
+        obs-pipewire-audio-capture
+        obs-gstreamer
+      ];
     };
     ssh = {
       enable = true;
@@ -344,10 +362,6 @@
           identityFile = "~/.ssh/aur";
           user = "aur";
         };
-        "pwner" = {
-          hostname = "pin-rpi2.aisec.fraunhofer.de";
-          user = "rumpelsepp";
-        };
         "pin-storage" = {
           hostname = "storage.pin.aisec.fraunhofer.de";
           user = "steff";
@@ -355,7 +369,7 @@
         };
       };
     };
-    texlive.enable = true;
+    # texlive.enable = true;
     home-manager.enable = true;
     nix-index = {
       enable = true;

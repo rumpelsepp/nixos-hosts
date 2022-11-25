@@ -244,10 +244,16 @@
       enable = true;
       extraPackages = with pkgs; [
         intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        # vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+        vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
         vaapiVdpau
         libvdpau-va-gl
+        intel-ocl
+        intel-compute-runtime
       ];
+    };
+    openrazer = {
+      users = ["steff"];
+      enable = true;
     };
   };
   # Enable touchpad support (enabled default in most desktopManager).
@@ -272,6 +278,7 @@
     opensc
     gnutls.bin
     pcsctools
+    glibcLocales
   ];
 
   environment.etc = {

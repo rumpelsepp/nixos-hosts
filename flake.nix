@@ -1,16 +1,17 @@
 {
   inputs = {
-    # nixpkgs.url = "nixpkgs/nixos-22.05";
-    nixpkgs.url = "nixpkgs";
+    nixpkgs.url = "nixpkgs/nixos-22.11";
+    # nixpkgs.url = "nixpkgs";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager = {
-      # url = "github:nix-community/home-manager/release-22.05";
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-22.11";
+      # url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }:
     let
       inherit (nixpkgs) lib;
       system = "x86_64-linux";
@@ -33,6 +34,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.steff = kronos_home;
             }
+            nixos-hardware.nixosModules.lenovo-thinkpad-t470s
           ];
         };
         selonia = util.host.mkHost {
