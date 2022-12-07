@@ -3,6 +3,7 @@
     nixpkgs.url = "nixpkgs/nixos-22.11";
     # nixpkgs.url = "nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    helix.url = "github:helix-editor/helix";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-22.11";
@@ -11,7 +12,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, helix, ... }:
     let
       inherit (nixpkgs) lib;
       system = "x86_64-linux";
@@ -20,7 +21,7 @@
         config = { allowUnfree = true; };
       };
       util = import ./lib { inherit system pkgs lib; };
-      kronos_home = import ./hosts/kronos/home.nix;
+      kronos_home = import ./hosts/kronos/home.nix {inherit helix;};
     in
     {
       nixosConfigurations = {

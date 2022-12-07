@@ -1,3 +1,4 @@
+{ helix}:
 { config, pkgs, ... }:
 
 {
@@ -38,6 +39,7 @@
   home.packages = with pkgs; [
     # wine
     # gnupg
+    asciiquarium
     alacritty
     chromium
     cifs-utils
@@ -115,7 +117,20 @@
     socat
     websocat
     pitivi
+    libmediainfo
+    tlp
   ];
+
+  home.file = {
+    ".local/bin/tmux-osc7.sh" = {
+      text = ''
+      #!${pkgs.bash}/bin/bash
+
+      tmux display-message -p -F "#{pane_path}" | sed "s|file://$(hostname)||"
+      '';
+      executable = true;
+    };
+  };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -129,6 +144,8 @@
 
   # Let Home Manager install and manage itself.
   programs = {
+    alacritty.enable = true;
+    kitty.enable = true;
     bat = {
       enable = true;
       config.theme = "1337";
@@ -217,13 +234,13 @@
         set-option -g focus-events on
 
         # Enable true color stuff
-        set-option -sa terminal-overrides ',alacritty:RGB'
-        set-option -sa terminal-overrides ',foot:RGB'
-        set-option -sa terminal-overrides ',xterm-256color:RGB'
+        set-option -as terminal-features ",xterm-256color:RGB"
+        set-option -as terminal-features ",alacritty:RGB"
+        set-option -as terminal-features ",foot:RGB"
 
-        bind-key "c" new-window -c "#{pane_current_path}"
-        bind-key '"' split-window -c "#{pane_current_path}"
-        bind-key "%" split-window -h -c "#{pane_current_path}"
+        bind-key "c" run-shell 'tmux new-window -c "$(tmux-osc7.sh)"'
+        bind-key '"' run-shell 'tmux split-window -c "$(tmux-osc7.sh)"'
+        bind-key "%" run-shell 'tmux split-window -h -c "$(tmux-osc7.sh)"'
         bind-key "/" copy-mode \; send-key /'';
     };
     fzf = {
@@ -292,6 +309,7 @@
     };
     helix = {
       enable = true;
+      package = helix.packages."x86_64-linux".default;
       settings = {
         keys.normal = {
           m.l = ["extend_to_line_bounds" "trim_selections"];
@@ -307,6 +325,8 @@
             normal = "block";
             select = "underline";
           };
+          auto-save = true;
+          # bufferline = "multiple";
           indent-guides = {
             render = true;
             character = "╎";
