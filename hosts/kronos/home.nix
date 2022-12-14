@@ -119,6 +119,10 @@
     pitivi
     libmediainfo
     tlp
+    shfmt
+    can-utils
+    imagemagick
+    pandoc
   ];
 
   home.file = {
@@ -141,6 +145,10 @@
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "22.05";
+
+  services = {
+    pulseeffects.enable = true;
+  };
 
   # Let Home Manager install and manage itself.
   programs = {
@@ -339,6 +347,11 @@
           name = "go";
           formatter = { command = "goimports"; };
           auto-format = true;
+        }
+        {
+          name = "bash";
+          indent = { tab-width = 4; unit = "\t"; };
+          formatter = { command = "shfmt"; };
         }
       ];
     };

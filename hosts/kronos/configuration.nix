@@ -21,7 +21,7 @@
     tmpOnTmpfs = true;
     extraModprobeConfig = ''
       options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
-      options thinkpad_acpi fan_control=1
+      # options thinkpad_acpi fan_control=1
     '';
     extraModulePackages = [ pkgs.linuxPackages.v4l2loopback ];
     kernel.sysctl = {
@@ -325,7 +325,7 @@
   # services.openssh.enable = true;
 
   services = {
-    thinkfan.enable = true;
+    # thinkfan.enable = true;
     pcscd.enable = true;
     geoclue2.enable = true;
     resolved = {
