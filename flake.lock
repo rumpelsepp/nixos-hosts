@@ -208,6 +208,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-master": {
+      "locked": {
+        "lastModified": 1671039435,
+        "narHash": "sha256-Io4CHlKJaOt6SyTIae4yr8DxmoiMtvot7kNUwwmypr8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e2b79f08bdc9de33df60edc214ddd6d6415caac5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1670856834,
@@ -228,7 +243,8 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-master": "nixpkgs-master"
       }
     },
     "rust-overlay": {

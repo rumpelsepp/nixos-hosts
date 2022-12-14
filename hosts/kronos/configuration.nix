@@ -135,7 +135,8 @@
     rtkit.enable = true;
     pam.loginLimits = [
       { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
-      { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+      { domain = "@audio"; item = "rtprio"; type = "-"; value = "98"; }
+      { domain = "@audio"; item = "nice"; type = "-"; value = "-11"; }
       { domain = "@audio"; item = "nofile"; type = "soft"; value = "99999"; }
       { domain = "@audio"; item = "nofile"; type = "hard"; value = "99999"; }
     ];
@@ -245,7 +246,7 @@
       enable = true;
       extraPackages = with pkgs; [
         intel-media-driver # LIBVA_DRIVER_NAME=iHD
-        vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+        vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
         vaapiVdpau
         libvdpau-va-gl
         intel-ocl
@@ -253,7 +254,7 @@
       ];
     };
     openrazer = {
-      users = ["steff"];
+      users = [ "steff" ];
       enable = true;
     };
   };
@@ -364,6 +365,7 @@
       extraRules = ''
         KERNEL=="rtc0", GROUP="audio"
         KERNEL=="hpet", GROUP="audio"
+        KERNEL=="cpu_dma_latency", GROUP="audio"
       '';
     };
   };

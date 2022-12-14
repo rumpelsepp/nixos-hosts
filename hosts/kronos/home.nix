@@ -1,4 +1,4 @@
-{ helix}:
+{ pkgs-master, helix }:
 { config, pkgs, ... }:
 
 {
@@ -82,7 +82,6 @@
     ripgrep
     rustup
     pinentry-gnome
-    reaper
     sequoia
     kdenlive
     signal-desktop
@@ -123,14 +122,14 @@
     can-utils
     imagemagick
     pandoc
-  ];
+  ] ++ [ pkgs-master.reaper ];
 
   home.file = {
     ".local/bin/tmux-osc7.sh" = {
       text = ''
-      #!${pkgs.bash}/bin/bash
+        #!${pkgs.bash}/bin/bash
 
-      tmux display-message -p -F "#{pane_path}" | sed "s|file://$(hostname)||"
+        tmux display-message -p -F "#{pane_path}" | sed "s|file://$(hostname)||"
       '';
       executable = true;
     };
@@ -147,7 +146,7 @@
   home.stateVersion = "22.05";
 
   services = {
-    pulseeffects.enable = true;
+    pulseeffects.enable = false;
   };
 
   # Let Home Manager install and manage itself.
@@ -320,9 +319,9 @@
       package = helix.packages."x86_64-linux".default;
       settings = {
         keys.normal = {
-          m.l = ["extend_to_line_bounds" "trim_selections"];
-          D = ["extend_to_line_end" "delete_selection"];
-          L = ["extend_to_line_bounds" "delete_selection_noyank" "open_above"];
+          m.l = [ "extend_to_line_bounds" "trim_selections" ];
+          D = [ "extend_to_line_end" "delete_selection" ];
+          L = [ "extend_to_line_bounds" "delete_selection_noyank" "open_above" ];
         };
         theme = "dark_plus";
         editor = {
@@ -371,11 +370,11 @@
     };
     mpv = {
       enable = true;
-      scripts = [pkgs.mpvScripts.mpris];
+      scripts = [ pkgs.mpvScripts.mpris ];
     };
     obs-studio = {
       enable = true;
-      plugins = with pkgs.obs-studio-plugins; [ 
+      plugins = with pkgs.obs-studio-plugins; [
         obs-pipewire-audio-capture
         obs-gstreamer
       ];
