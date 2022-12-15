@@ -122,7 +122,7 @@
     can-utils
     imagemagick
     pandoc
-  ] ++ [ pkgs-master.reaper ];
+  ] ++ [ pkgs-master.reaper pkgs-master.gallia ];
 
   home.file = {
     ".local/bin/tmux-osc7.sh" = {
@@ -149,7 +149,6 @@
     pulseeffects.enable = false;
   };
 
-  # Let Home Manager install and manage itself.
   programs = {
     alacritty.enable = true;
     kitty.enable = true;

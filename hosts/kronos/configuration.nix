@@ -300,7 +300,7 @@
     };
 
     spiceUSBRedirection.enable = true;
-    docker.enable = true;
+    docker.enable = false;
   };
 
   system.activationScripts = {
@@ -350,7 +350,6 @@
     };
 
     flatpak.enable = true;
-
     gnome.gnome-keyring.enable = true;
 
     pipewire = {
