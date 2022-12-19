@@ -34,6 +34,14 @@
       QT_QPA_PLATFORM = "wayland";
       EDITOR = "hx";
       LIBVA_DRIVER_NAME = "iHD";
+
+      # https://github.com/NixOS/nixpkgs/issues/195936#issuecomment-1278954466
+      GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+        pkgs.gst_all_1.gst-plugins-good
+        pkgs.gst_all_1.gst-plugins-bad
+        pkgs.gst_all_1.gst-plugins-ugly
+        pkgs.gst_all_1.gst-libav
+      ];
     };
 
   home.packages = with pkgs; [
@@ -80,10 +88,8 @@
     rclone
     restic
     ripgrep
-    rustup
     pinentry-gnome
     sequoia
-    kdenlive
     signal-desktop
     tokei
     tree
@@ -122,7 +128,11 @@
     can-utils
     imagemagick
     pandoc
-  ] ++ [ pkgs-master.reaper pkgs-master.gallia ];
+  ] ++ [
+    pkgs-master.reaper
+    pkgs-master.gallia
+    pkgs-master.kdenlive
+  ];
 
   home.file = {
     ".local/bin/tmux-osc7.sh" = {
