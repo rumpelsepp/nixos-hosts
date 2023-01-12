@@ -36,69 +36,95 @@
       LIBVA_DRIVER_NAME = "iHD";
 
       # https://github.com/NixOS/nixpkgs/issues/195936#issuecomment-1278954466
-      GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
-        pkgs.gst_all_1.gst-plugins-good
-        pkgs.gst_all_1.gst-plugins-bad
-        pkgs.gst_all_1.gst-plugins-ugly
-        pkgs.gst_all_1.gst-libav
-      ];
+      GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with pkgs.gst_all_1; [
+        gst-plugins-good
+        gst-plugins-bad
+        gst-plugins-ugly
+        gst-libav
+      ]);
+
+      # TODO: Remove ones this is available in nixpkgs.
+      # https://github.com/Mic92/nix-ld/pull/31
+      NIX_LD = "${pkgs.glibc}/lib/ld-linux-x86-64.so.2";
     };
 
   home.packages = with pkgs; [
-    # wine
-    # gnupg
-    asciiquarium
+    _7zz
     alacritty
+    asciiquarium
+    can-utils
     chromium
     cifs-utils
     curl
     dconf
     delta
+    difftastic
+    dnsmasq
+    dos2unix
     fd
+    ffmpeg
     file
     foot
-    ffmpeg
+    gimp
+    gitoxide
     gnumake
+    # gnupg
     gopass
     gopro
-    gimp
+    gst_all_1.gst-vaapi
     hexyl
+    imagemagick
     inkscape
+    intel-gpu-tools
     keyutils
     killall
     libinput
+    libmediainfo
     libreoffice
+    libva-utils
     lsp-plugins
     man-pages
     man-pages-posix
     musescore
     ncdu_2
-    difftastic
+    netcat-openbsd
     networkmanagerapplet
     nftables
     nmap
     openssl_3
+    pandoc
     pavucontrol
+    pdftk
+    pinentry-gnome
+    # pitivi
     pwgen
+    pwntools
     python310
     python310Packages.ipython
+    python310Packages.pygments
     qemu_full
+    qjackctl
     qpwgraph
     qrencode
     rclone
     restic
     ripgrep
-    pinentry-gnome
     sequoia
-    signal-desktop
+    shfmt
+    socat
+    texlive.combined.scheme-full
+    tlp
     tokei
     tree
     tuxguitar
     unzip
     usbutils
     vlc
+    websocat
     wget
+    # wine
     wineWowPackages.waylandFull
+    wireshark-qt
     wl-clipboard
     xplr
     yabridge
@@ -106,33 +132,14 @@
     yt-dlp
     zam-plugins
     zip
-    qjackctl
-    dos2unix
-    wireshark-qt
-    _7zz
-    dnsmasq
-    gitoxide
-    netcat-openbsd
-    texlive.combined.scheme-full
-    python310Packages.pygments
-    intel-gpu-tools
-    libva-utils
-    gst_all_1.gst-vaapi
-    pwntools
-    socat
-    websocat
-    pitivi
-    libmediainfo
-    tlp
-    shfmt
-    can-utils
-    imagemagick
-    pandoc
-  ] ++ [
-    pkgs-master.reaper
-    pkgs-master.gallia
-    pkgs-master.kdenlive
-  ];
+  ] ++ (with pkgs-master; [
+    alsa-scarlett-gui
+    gallia
+    kdenlive
+    reaper
+    signal-desktop
+    # Use this until libwayland problem fixed.
+  ]);
 
   home.file = {
     ".local/bin/tmux-osc7.sh" = {
@@ -140,6 +147,52 @@
         #!${pkgs.bash}/bin/bash
 
         tmux display-message -p -F "#{pane_path}" | sed "s|file://$(hostname)||"
+      '';
+      executable = true;
+    };
+    ".local/bin/echoh" = {
+      text = ''
+        #!${pkgs.python3}/bin/python
+
+        import argparse
+        import binascii
+        import sys
+
+
+        def parse_args() -> argparse.Namespace:
+            parser = argparse.ArgumentParser()
+            parser.add_argument(
+                "HEX",
+                nargs="+",
+                type=binascii.unhexlify,
+                help="hex values",
+            )
+
+            return parser.parse_args()
+
+
+        def main() -> None:
+            args = parse_args()
+            sys.stdout.buffer.write(b"".join(args.HEX))
+
+
+        if __name__ == "__main__":
+            main()
+      '';
+      executable = true;
+    };
+    ".local/bin/trimws" = {
+      text = ''
+        #!/usr/bin/env -S sed -f
+
+        :a
+        /^\n*$/ {
+            $d
+            N
+            ba
+        }
+
+        s/[[:space:]]\+$//
       '';
       executable = true;
     };

@@ -23,12 +23,12 @@
       options snd_usb_audio vid=0x1235 pid=0x8214 device_setup=1
       # options thinkpad_acpi fan_control=1
     '';
-    extraModulePackages = [ pkgs.linuxPackages.v4l2loopback ];
+    extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
     kernel.sysctl = {
       "net.core.rmem_max" = 2500000;
     };
     kernelModules = [ "v4l2loopback" ];
-    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -300,7 +300,7 @@
     };
 
     spiceUSBRedirection.enable = true;
-    docker.enable = false;
+    docker.enable = true;
   };
 
   system.activationScripts = {
