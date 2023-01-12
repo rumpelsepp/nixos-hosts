@@ -134,7 +134,7 @@
     zip
   ] ++ (with pkgs-master; [
     alsa-scarlett-gui
-    gallia
+    # gallia
     kdenlive
     reaper
     signal-desktop

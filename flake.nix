@@ -26,7 +26,6 @@
         config = { allowUnfree = true; };
       };
       util = import ./lib { inherit system pkgs lib; };
-      kronos_home = import ./hosts/kronos/home.nix { inherit pkgs-master helix; };
     in
     {
       nixosConfigurations = {
@@ -38,7 +37,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.steff = kronos_home;
+              home-manager.users.steff = import ./hosts/kronos/home.nix { inherit pkgs-master helix; };
             }
             nixos-hardware.nixosModules.lenovo-thinkpad-t470s
           ];
