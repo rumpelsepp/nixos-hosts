@@ -26,6 +26,7 @@
     extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
     kernel.sysctl = {
       "net.core.rmem_max" = 2500000;
+      "net.ipv4.ip_unprivileged_port_start" = 0;
     };
     kernelModules = [ "v4l2loopback" ];
     kernelPackages = pkgs.linuxPackages_latest;
@@ -343,12 +344,26 @@
     docker.enable = true;
   };
 
-  system.activationScripts = {
-    rfkillUnblockWlan = {
-      text = ''
-        rfkill unblock wlan
-      '';
-      deps = [ ];
+  system = {
+    activationScripts = {
+      rfkillUnblockWlan = {
+        text = ''
+          rfkill unblock wlan
+        '';
+        deps = [ ];
+      };
+    };
+    userActivationScripts = {
+      # This is for smartcard support in evolution.
+      # Should be the default, but it isn't… Check at some point 
+      # in time if the smartcard works without this…
+      addP11KitProxy = {
+        text = ''
+          ${pkgs.nssTools}/bin/modutil -dbdir sql:.pki/nssdb -delete p11-kit-proxy || true
+          ${pkgs.nssTools}/bin/modutil -dbdir sql:.pki/nssdb -add p11-kit-proxy -libfile ${pkgs.p11-kit}/lib/p11-kit-proxy.so
+        '';
+        deps = [ ];
+      };
     };
   };
 
