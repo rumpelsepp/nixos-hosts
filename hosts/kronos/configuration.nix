@@ -50,18 +50,14 @@
             set -eu
 
             if [[ "$NM_DISPATCHER_ACTION" != "vpn-up" ]]; then
-                echo "wrong actions"
-                echo "$NM_DISPATCHER_ACTION"
                 exit
             fi
 
             if [[ "$CONNECTION_ID" != "AISEC-2FA" ]]; then
-                echo "wrong id"
-                echo "$CONNECTION_ID"
                 exit
             fi
 
-            resolvectl domain "$DEVICE_IP_IFACE" "~fraunhofer.de" "~aisec.fraunhofer.de"
+            resolvectl domain "$VPN_IP_IFACE" "~fraunhofer.de" "~aisec.fraunhofer.de"
           '';
         }
       ];
