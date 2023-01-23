@@ -76,6 +76,7 @@
     imagemagick
     inkscape
     intel-gpu-tools
+    just
     keyutils
     killall
     libinput
@@ -114,6 +115,7 @@
     socat
     texlive.combined.scheme-full
     tlp
+    todo-txt-cli
     tokei
     tree
     tuxguitar
@@ -137,8 +139,9 @@
     # gallia
     kdenlive
     reaper
-    signal-desktop
     # Use this until libwayland problem fixed.
+    signal-desktop
+    oscclip
   ]);
 
   home.file = {
@@ -234,6 +237,7 @@
         today = "date +%F";
         hd = "hexdump -C";
         o = "gio open";
+        t = "todo.sh";
       };
       interactiveShellInit = ''
         complete -c hd -w hexdump
@@ -394,7 +398,7 @@
             normal = "block";
             select = "underline";
           };
-          auto-save = true;
+          # auto-save = true;
           # bufferline = "multiple";
           indent-guides = {
             render = true;
@@ -465,10 +469,6 @@
     };
     # texlive.enable = true;
     home-manager.enable = true;
-    nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-    };
     wezterm.enable = true;
     zellij.enable = true;
     zoxide = {
