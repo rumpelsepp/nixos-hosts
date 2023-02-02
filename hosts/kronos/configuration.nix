@@ -32,7 +32,11 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    auto-optimise-store = true;
+    experimental-features = [ "nix-command" "flakes" ];
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   networking = {
@@ -292,7 +296,7 @@
     };
     openrazer = {
       users = [ "steff" ];
-      enable = true;
+      enable = false;
     };
   };
   # Enable touchpad support (enabled default in most desktopManager).

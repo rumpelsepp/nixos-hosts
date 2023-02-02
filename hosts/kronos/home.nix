@@ -43,14 +43,13 @@
         gst-libav
       ]);
 
-      # TODO: Remove ones this is available in nixpkgs.
+      # TODO: Remove once this is available in nixpkgs.
       # https://github.com/Mic92/nix-ld/pull/31
       NIX_LD = "${pkgs.glibc}/lib/ld-linux-x86-64.so.2";
     };
 
   home.packages = with pkgs; [
     _7zz
-    alacritty
     asciiquarium
     can-utils
     chromium
@@ -73,6 +72,7 @@
     gopro
     gst_all_1.gst-vaapi
     hexyl
+    hyperfine
     imagemagick
     inkscape
     intel-gpu-tools
@@ -113,6 +113,7 @@
     sequoia
     shfmt
     socat
+    taskwarrior
     texlive.combined.scheme-full
     tlp
     todo-txt-cli
@@ -136,7 +137,7 @@
     zip
   ] ++ (with pkgs-master; [
     alsa-scarlett-gui
-    # gallia
+    gallia
     kdenlive
     reaper
     # Use this until libwayland problem fixed.
@@ -154,49 +155,15 @@
       executable = true;
     };
     ".local/bin/echoh" = {
-      text = ''
-        #!${pkgs.python3}/bin/python
-
-        import argparse
-        import binascii
-        import sys
-
-
-        def parse_args() -> argparse.Namespace:
-            parser = argparse.ArgumentParser()
-            parser.add_argument(
-                "HEX",
-                nargs="+",
-                type=binascii.unhexlify,
-                help="hex values",
-            )
-
-            return parser.parse_args()
-
-
-        def main() -> None:
-            args = parse_args()
-            sys.stdout.buffer.write(b"".join(args.HEX))
-
-
-        if __name__ == "__main__":
-            main()
-      '';
+      source = ../../scripts/echoh.py;
       executable = true;
     };
     ".local/bin/trimws" = {
-      text = ''
-        #!/usr/bin/env -S sed -f
-
-        :a
-        /^\n*$/ {
-            $d
-            N
-            ba
-        }
-
-        s/[[:space:]]\+$//
-      '';
+      source = ../../scripts/trimws.sed;
+      executable = true;
+    };
+    ".local/bin/bookmark-add" = {
+      source = ../../scripts/bookmark-add.py;
       executable = true;
     };
   };
@@ -216,7 +183,12 @@
   };
 
   programs = {
-    alacritty.enable = true;
+    alacritty = {
+      enable = true;
+      settings = {
+        
+      };
+    };
     kitty.enable = true;
     bat = {
       enable = true;
@@ -237,7 +209,6 @@
         today = "date +%F";
         hd = "hexdump -C";
         o = "gio open";
-        t = "todo.sh";
       };
       interactiveShellInit = ''
         complete -c hd -w hexdump
@@ -388,6 +359,9 @@
           m.l = [ "extend_to_line_bounds" "trim_selections" ];
           D = [ "extend_to_line_end" "delete_selection" ];
           L = [ "extend_to_line_bounds" "delete_selection_noyank" "open_above" ];
+          # Swap x and X: https://github.com/helix-editor/helix/discussions/835
+          # X = [ "extend_line_below" ];
+          # x = [ "extend_to_line_bounds" ]; 
         };
         theme = "dark_plus";
         editor = {
@@ -404,6 +378,7 @@
             render = true;
             character = "╎";
           };
+          soft-wrap.enable = true;
           lsp.auto-signature-help = false;
         };
       };
