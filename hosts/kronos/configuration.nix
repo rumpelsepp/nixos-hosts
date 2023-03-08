@@ -37,7 +37,9 @@
     experimental-features = [ "nix-command" "flakes" ];
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
 
   networking = {
     hostName = "kronos";
@@ -322,6 +324,7 @@
     gnutls.bin
     pcsctools
     glibcLocales
+    exfatprogs
   ];
 
   environment.etc = {

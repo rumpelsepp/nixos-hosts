@@ -68,7 +68,7 @@
     gitoxide
     gnumake
     # gnupg
-    gopass
+    # gopass
     gopro
     gst_all_1.gst-vaapi
     hexyl
@@ -116,7 +116,6 @@
     taskwarrior
     texlive.combined.scheme-full
     tlp
-    todo-txt-cli
     tokei
     tree
     tuxguitar
@@ -135,14 +134,21 @@
     yt-dlp
     zam-plugins
     zip
+    kooha
+    video-trimmer
+    # gnome-decoder
   ] ++ (with pkgs-master; [
     alsa-scarlett-gui
     gallia
+    gopass
     kdenlive
     reaper
     # Use this until libwayland problem fixed.
     signal-desktop
     oscclip
+    # davinci-resolve
+    # openshot-qt
+    pitivi
   ]);
 
   home.file = {
@@ -164,6 +170,10 @@
     };
     ".local/bin/bookmark-add" = {
       source = ../../scripts/bookmark-add.py;
+      executable = true;
+    };
+    ".local/bin/backup" = {
+      source = ../../scripts/backup-kronos.sh;
       executable = true;
     };
   };
