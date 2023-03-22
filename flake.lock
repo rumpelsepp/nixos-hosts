@@ -111,11 +111,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1679325061,
-        "narHash": "sha256-rhFhPPiknbNYOi7QTWqj/T8DNBUu31EWHfUqoRQzzwU=",
+        "lastModified": 1679463188,
+        "narHash": "sha256-8bRIhlZPcwOm7gVcDAhhADeOHhyqr/ue5KzUdgnVjqY=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "05e7862e8fc34e2e4dd745f9dc95c1b1ab0dc20f",
+        "rev": "f9a25a7e0928e1a2f98108cad0f2bea99bedad59",
         "type": "github"
       },
       "original": {
@@ -242,47 +242,31 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1679324057,
-        "narHash": "sha256-GgYrI0Jz4JxkHK6iNFxTn9qmZkBZ1MSqXAERawY2d/s=",
+        "lastModified": 1679472993,
+        "narHash": "sha256-+Udh/LmQLHpKo9XituVhsyGeLGVWiQMVqYlTtP91iy4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8501a1645abcc4ad91c9eadd53061124f5bebb3b",
+        "rev": "e6701db34c73bbc2262f5c15a86c0f1f97be719e",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-pinned": {
-      "locked": {
-        "lastModified": 1677063315,
-        "narHash": "sha256-qiB4ajTeAOVnVSAwCNEEkoybrAlA+cpeiBxLobHndE8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "988cc958c57ce4350ec248d2d53087777f9e1949",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "988cc958c57ce4350ec248d2d53087777f9e1949",
         "type": "github"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1679224734,
-        "narHash": "sha256-1Ab3xY7Wgo1h1TNwRt6fp2XjV+KUo+hP1Bolh0KiDJs=",
+        "lastModified": 1679410443,
+        "narHash": "sha256-xDHO/jixWD+y5pmW5+2q4Z4O/I/nA4MAa30svnZKK+M=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "eac7da7b519a5aefe92c33c90b4450a24ebe0ab3",
+        "rev": "c9ece0059f42e0ab53ac870104ca4049df41b133",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
-        "ref": "nixos-22.11",
+        "ref": "nixpkgs-unstable",
         "type": "indirect"
       }
     },
@@ -332,8 +316,7 @@
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-master": "nixpkgs-master",
-        "nixpkgs-pinned": "nixpkgs-pinned"
+        "nixpkgs-master": "nixpkgs-master"
       }
     },
     "rust-overlay": {
