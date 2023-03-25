@@ -1,14 +1,16 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-22.11";
+    # nixpkgs.url = "nixpkgs/nixos-22.11";
+    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+    # Pin this for virtualbox…
     nixpkgs-master.url = "github:NixOS/nixpkgs";
     # nixpkgs.url = "nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     helix.url = "github:helix-editor/helix";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.11";
-      # url = "github:nix-community/home-manager";
+      # url = "github:nix-community/home-manager/release-22.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -26,13 +28,14 @@
         config = { allowUnfree = true; };
       };
       util = import ./lib { inherit system pkgs lib; };
+      kronos-config = import ./hosts/kronos/configuration.nix;
     in
     {
       nixosConfigurations = {
         kronos = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./hosts/kronos/configuration.nix
+            kronos-config
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;

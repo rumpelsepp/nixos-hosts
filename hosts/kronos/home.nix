@@ -42,10 +42,6 @@
         gst-plugins-ugly
         gst-libav
       ]);
-
-      # TODO: Remove once this is available in nixpkgs.
-      # https://github.com/Mic92/nix-ld/pull/31
-      NIX_LD = "${pkgs.glibc}/lib/ld-linux-x86-64.so.2";
     };
 
   home.packages = with pkgs; [
@@ -63,7 +59,6 @@
     fd
     ffmpeg
     file
-    foot
     gimp
     gitoxide
     gnumake
@@ -86,7 +81,6 @@
     lsp-plugins
     man-pages
     man-pages-posix
-    musescore
     ncdu_2
     netcat-openbsd
     networkmanagerapplet
@@ -137,18 +131,18 @@
     kooha
     video-trimmer
     # gnome-decoder
-  ] ++ (with pkgs-master; [
-    alsa-scarlett-gui
-    gallia
+    signal-desktop
     gopass
+    musescore
+    alsa-scarlett-gui
+    oscclip
+  ] ++ (with pkgs-master; [
+    gallia
     kdenlive
     reaper
-    # Use this until libwayland problem fixed.
-    signal-desktop
-    oscclip
     # davinci-resolve
     # openshot-qt
-    pitivi
+    fractal-next
   ]);
 
   home.file = {
@@ -193,13 +187,81 @@
   };
 
   programs = {
+    atuin = {
+      enable = true;
+      enableFishIntegration = true;
+      flags = [ "--disable-up-arrow" "--disable-ctrl-r" ];
+    };
     alacritty = {
       enable = true;
       settings = {
-        
+        font.size = 10;
+        shell.program = "${pkgs.fish}/bin/fish";
+        colors = {
+          # https://gitlab.gnome.org/GNOME/console/-/blob/main/src/kgx-terminal.c#L141
+          # Default colors
+          primary = {
+            background = "0x1e1e1e";
+            foreground = "0xffffff";
+          };
+          # Normal colors
+          normal = {
+            black = "0x241f31";
+            red = "0xc01c28";
+            green = "0x2ec27e";
+            yellow = "0xf5c211";
+            blue = "0x1e78e4";
+            magenta = "0x9841bb";
+            cyan = "0x0ab9dc";
+            white = "0xc0bfbc";
+          };
+          # Bright colors
+          bright = {
+            black = "0x5e5c64";
+            red = "0xed333b";
+            green = "0x57e389";
+            yellow = "0xf8e45c";
+            blue = "0x51a1ff";
+            magenta = "0xc061cb";
+            cyan = "0x4fd2fd";
+            white = "0xf6f5f4";
+          };
+        };
       };
     };
-    kitty.enable = true;
+    foot = {
+      enable = true;
+      # https://gitlab.gnome.org/GNOME/console/-/blob/main/src/kgx-terminal.c#L141
+      settings = {
+        main ={
+          shell = "${pkgs.fish}/bin/fish";
+          font = "monospace:size=10";
+        };
+        colors = {
+          background = "000000";
+          foreground = "ffffff";
+          regular0 = "241f31";
+          regular1 = "c01c28";
+          regular2 = "2ec27e";
+          regular3 = "f5c211";
+          regular4 = "1e78e4";
+          regular5 = "9841bb";
+          regular6 = "0ab9dc";
+          regular7 = "c0bfbc";
+          bright0 = "5e5c64";
+          bright1 = "ed333b";
+          bright2 = "57e389";
+          bright3 = "f8e45c";
+          bright4 = "51a1ff";
+          bright5 = "c061cb";
+          bright6 = "4fd2fd";
+          bright7 = "f6f5f4";
+        };
+      };
+    };
+    kitty = {
+      enable = true;
+    };
     bat = {
       enable = true;
       config.theme = "1337";
@@ -223,6 +285,19 @@
       interactiveShellInit = ''
         complete -c hd -w hexdump
         complete -c o -w "gio open"
+
+        # Hack because tmux is not supported for osc7.
+        # It is checked if this function already exists.
+        # XXX: Report this upstream.
+        if test "$TERM_PROGRAM" = tmux && ! functions -a | string match "__update_cwd_osc" > /dev/null
+          function __update_cwd_osc --on-variable PWD --description 'Notify capable terminals when $PWD changes'
+              if status --is-command-substitution || set -q INSIDE_EMACS
+                  return
+              end
+              printf \e\]7\;file://%s%s\a $hostname (string escape --style=url $PWD)
+          end
+          __update_cwd_osc # Run once because we might have already inherited a PWD from an old tab
+        end
 
         set fish_greeting
         set fish_command_not_found
@@ -389,7 +464,10 @@
             character = "╎";
           };
           soft-wrap.enable = true;
-          lsp.auto-signature-help = false;
+          lsp = {
+            auto-signature-help = false;
+            display-inlay-hints = true;
+          };
         };
       };
       languages = [
@@ -452,13 +530,11 @@
         };
       };
     };
+    vscode = {
+      enable = true;
+    };
     # texlive.enable = true;
     home-manager.enable = true;
-    wezterm.enable = true;
     zellij.enable = true;
-    zoxide = {
-      enable = true;
-      enableFishIntegration = true;
-    };
   };
 }
